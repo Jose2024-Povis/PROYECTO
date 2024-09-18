@@ -1,0 +1,89 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #f4f4f4;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.logo {
+    max-width: 150px; /* Ajusta el tamaño del logo */
+    height: auto;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #ffffff; /* Fondo blanco para la tabla */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para efecto de elevación */
+}
+
+th, td {
+    border: 2px solid #007BFF; /* Borde azul para las celdas */
+    padding: 12px;
+    text-align: left;
+    word-break: break-word; /* Asegura que el contenido largo se ajuste dentro de las celdas */
+}
+
+th {
+    background-color: #007BFF; /* Fondo azul para las cabeceras */
+    color: #ffffff; /* Color del texto en blanco */
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Fondo gris claro para filas pares */
+}
+
+tr:hover {
+    background-color: #e1f5fe; /* Fondo azul claro al pasar el ratón sobre una fila */
+}
+
+/* Enlace en la tabla */
+a {
+    color: #007BFF; /* Color azul para los enlaces */
+    text-decoration: none; /* Eliminar subrayado de los enlaces */
+}
+
+a:hover {
+    text-decoration: underline; /* Subrayar los enlaces al pasar el ratón */
+}

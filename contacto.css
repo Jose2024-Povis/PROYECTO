@@ -1,0 +1,105 @@
+/* Estilos generales para el sitio */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #003366; /* Color oscuro para el encabezado */
+    color: white;
+    padding: 10px 20px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    max-height: 50px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #e0e0e0;
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Asegura que el contenido esté centrado verticalmente */
+}
+
+.contact-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Limita el ancho para una mejor presentación */
+    text-align: center; /* Centra el texto */
+}
+
+.contact-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #003366; /* Color del título */
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-details,
+.supervisor-details {
+    margin-bottom: 20px;
+}
+
+.contact-image-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.contact-image {
+    width: 120px; /* Tamaño ajustado de la imagen */
+    height: auto;
+    border-radius: 50%; /* Opcional: Hace la imagen redonda */
+    border: 2px solid #003366; /* Opcional: Añade un borde alrededor de la imagen */
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #003366; /* Color de fondo del pie de página */
+    color: white;
+    border-top: 1px solid #e5e5e5;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recordatorios de Medicamentos - CENTRO MÉDICO JOSÉ POVIS</title>
+    <link rel="stylesheet" href="recordatorio.css" />
+    <!-- Incluye la biblioteca qrcode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <img src="logo.png" alt="Logo del Hospital" class="logo" />
+        <nav>
+          <ul>
+            <li><a href="pagina.html">Inicio</a></li>
+            <li><a href="acercade.html">Acerca de</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="#contact">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="reminder-form-section">
+        <h2>Registrar Medicamento</h2>
+        <form action="#" method="post" id="medication-form">
+          <label for="medication-name">Nombre del Medicamento:</label>
+          <input
+            type="text"
+            id="medication-name"
+            name="medication-name"
+            required
+          />
+
+          <label for="dosage">Dosis:</label>
+          <input type="text" id="dosage" name="dosage" required />
+
+          <label for="time">Hora de Toma:</label>
+          <input type="time" id="time" name="time" required />
+
+          <label for="minutes">Minutos después de cada toma:</label>
+          <input
+            type="number"
+            id="minutes"
+            name="minutes"
+            min="0"
+            placeholder="Por ejemplo: 30"
+            required
+          />
+
+          <label for="phone-number">Número de Teléfono:</label>
+          <input
+            type="text"
+            id="phone-number"
+            name="phone-number"
+            placeholder="Por ejemplo: 51929782048"
+            required
+          />
+
+          <button type="submit">Guardar Recordatorio</button>
+        </form>
+      </section>
+
+      <section class="reminders-list-section">
+        <h2>Recordatorios Guardados</h2>
+        <ul id="reminders-list"></ul>
+      </section>
+    </main>
+
+    <audio id="alarm-sound" src="../topicos/alarma.mp3" preload="auto"></audio>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("medication-form");
+        const remindersList = document.getElementById("reminders-list");
+        const alarmSound = document.getElementById("alarm-sound");
+        const qrForm = document.getElementById("qr-form");
+        const qrPhoneNumberInput = document.getElementById("qr-phone-number");
+        const qrcode = document.getElementById("qrcode");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault(); // Previene el envío del formulario
+
+          const medicationName =
+            document.getElementById("medication-name").value;
+          const dosage = document.getElementById("dosage").value;
+          const time = document.getElementById("time").value;
+          const minutes = document.getElementById("minutes").value;
+          const phoneNumber = document.getElementById("phone-number").value;
+
+          const reminder = {
+            medicationName: medicationName,
+            dosage: dosage,
+            time: time,
+            minutes: minutes,
+            phoneNumber: phoneNumber,
+          };
+
+          let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+          reminders.push(reminder);
+          localStorage.setItem("reminders", JSON.stringify(reminders));
+
+          displayReminders();
+          alert("Recordatorio guardado con éxito!");
+          form.reset(); // Resetea el formulario
+        });
+
+        function displayReminders() {
+          remindersList.innerHTML = ""; // Limpiar la lista actual
+          const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+          reminders.forEach(function (reminder, index) {
+            const li = document.createElement("li");
+            li.textContent = `Medicamento: ${reminder.medicationName}, Dosis: ${reminder.dosage}, Hora: ${reminder.time}, Minutos después de toma: ${reminder.minutes}, Teléfono: ${reminder.phoneNumber}`;
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Eliminar";
+            deleteButton.addEventListener("click", function () {
+              deleteReminder(index);
+            });
+            li.appendChild(deleteButton);
+            remindersList.appendChild(li);
+          });
+        }
+
+        function deleteReminder(index) {
+          let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+          reminders.splice(index, 1); // Eliminar el recordatorio en la posición `index`
+          localStorage.setItem("reminders", JSON.stringify(reminders));
+          displayReminders(); // Actualizar la lista de recordatorios
+        }
+
+        displayReminders(); // Mostrar recordatorios guardados al cargar la página
+
+        // Función para revisar los recordatorios cada minuto (actualizada)
+        function revisarRecordatorios() {
+          const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+          const ahora = new Date();
+
+          reminders.forEach(function (reminder) {
+            const horaRecordatorio = new Date();
+            const [hours, minutes] = reminder.time.split(":");
+            horaRecordatorio.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+            // Diferencia en milisegundos entre la hora actual y la hora del recordatorio
+            const diferenciaTiempo = ahora - horaRecordatorio;
+
+            // Convertir minutos a milisegundos
+            const intervalo = parseInt(reminder.minutes) * 60 * 1000;
+
+            // Verifica si la alarma debería sonar de nuevo (si la diferencia es múltiplo del intervalo de minutos)
+            if (diferenciaTiempo >= 0 && diferenciaTiempo % intervalo < 60000) {
+              const reminderMessage = `¡Hola! Es hora de tomar tu medicamento: ${reminder.medicationName}, dosis: ${reminder.dosage}.`;
+              const encodedMessage = encodeURIComponent(reminderMessage);
+              const whatsappUrl = `https://wa.me/${reminder.phoneNumber}?text=${encodedMessage}`;
+
+              // Abrir WhatsApp en una nueva ventana
+              window.open(whatsappUrl, "_blank");
+
+              // Asegurar que el audio se pueda reproducir
+              alarmSound.play().then(() => {
+                setTimeout(() => {
+                  alarmSound.pause(); // Detener el sonido
+                  alarmSound.currentTime = 0; // Reiniciar el tiempo de reproducción al inicio
+                }, 10000); // 10 segundos
+
+                alert(`¡Es la hora de tu medicamento: ${reminder.medicationName}!`);
+              }).catch(error => {
+                console.error("Error al reproducir el sonido:", error);
+              });
+            }
+          });
+        }
+
+        // Revisar los recordatorios cada minuto
+        setInterval(revisarRecordatorios, 60000);
+
+        // Llamar a la función inmediatamente al cargar la página
+        revisarRecordatorios();
+
+        // Generar código QR cuando se envíe el formulario de QR
+        qrForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // Previene el envío del formulario
+          const qrPhoneNumber = qrPhoneNumberInput.value;
+          QRCode.toCanvas(
+            qrcode,
+            `https://wa.me/${qrPhoneNumber}`,
+            function (error) {
+              if (error) {
+                console.error("Error al generar el código QR:", error);
+              } else {
+                console.log("Código QR generado exitosamente!");
+              }
+            }
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

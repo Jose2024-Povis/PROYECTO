@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Diagnóstico</title>
+    <link rel="stylesheet" href="doctor.css"> <!-- Enlace a tu archivo CSS -->
+</head>
+<body>
+    <h2>Registro de Diagnóstico</h2>
+    <form action="doctor.php" method="POST">
+        <label for="paciente_nombre">Nombre del Paciente:</label><br>
+        <input type="text" id="paciente_nombre" name="paciente_nombre" required><br><br>
+
+        <label for="diagnostico">Motivos de Cita:</label><br>
+        <textarea id="diagnostico" name="diagnostico" required></textarea><br><br>
+
+        <label for="resultado">Resultado:</label><br>
+        <textarea id="resultado" name="resultado" required></textarea><br><br>
+
+        <label for="created_at">Fecha de Creación:</label><br>
+        <input type="datetime-local" id="created_at" name="created_at" required><br><br>
+
+        <label for="meet_link">Link de Meet para Consulta en Línea:</label><br>
+        <td><a href="https://meet.google.com/kiu-kmnb-ahd">Enlace Meet</a></td>
+
+        <input type="submit" value="Guardar Diagnóstico">
+    </form>
+    <div class="buttons">
+        <a href="cerrar_sesion.php" class="btn btn-logout">Cerrar sesión</a>
+    </div>
+</body>
+</html>
